@@ -51,7 +51,8 @@ public class EmployeeController {
     public ResponseEntity<Object> updateEmployee(@PathVariable int employeeId, @RequestBody EmployeeDetails employeeDetails) throws EmployeeNotFoundException {
 
         try {
-            employeeService.updateEmployee(employeeId,employeeDetails);
+            employeeDetails.setEmployeeId(employeeId);
+            employeeService.updateEmployee(employeeDetails);
 
         } catch (EmployeeNotFoundException ex) {
             return new ResponseEntity<>(ex.getMessage(),HttpStatus.NOT_FOUND);

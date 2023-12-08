@@ -37,18 +37,19 @@ public class EmployeeService {
         return employeeRepository.findAll();
     }
 
-    public void updateEmployee(int employeeId,EmployeeDetails employeeDetails) throws EmployeeNotFoundException {
-        Optional<EmployeeDetails> optional= employeeRepository.findById(employeeId);
-        if(optional.isPresent()){
-            EmployeeDetails employeeInputDetails = employeeDetails.builder()
-                    .employeeName(employeeDetails.getEmployeeName())
-                    .location(employeeDetails.getLocation())
-                    .role(employeeDetails.getRole())
-                    .build();
+    public void updateEmployee(EmployeeDetails employeeDetails) throws EmployeeNotFoundException {
+        Optional<EmployeeDetails> employeeDb= employeeRepository.findById(employeeDetails.getEmployeeId());
 
-            employeeRepository.save(employeeInputDetails);
+        if(employeeDb.isPresent()){
+            EmployeeDetails employeeDetailsNew = employeeDb.get();
+            employeeDetailsNew.setEmployeeId(employeeDetails.getEmployeeId());
+            employeeDetailsNew.setEmployeeName(employeeDetails.getEmployeeName());
+            employeeDetailsNew.setRole(employeeDetails.getRole());
+            employeeDetailsNew.setLocation(employeeDetails.getLocation());
+
+            employeeRepository.save(employeeDetailsNew);
         }else
-            throw new EmployeeNotFoundException(employeeId);
+            throw new EmployeeNotFoundException(employeeDetails.getEmployeeId());
     }
 
     public void deleteEmployee(int employeeId) throws EmployeeNotFoundException {
