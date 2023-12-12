@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 @RestController
 public class EmployeeController {
@@ -21,6 +22,7 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
+    private final static Logger logger = Logger.getLogger(EmployeeController.class.getName());
 
     @RequestMapping(value = "/api/addemployee",method= RequestMethod.POST)
     public ResponseEntity<Object> addEmployees(@RequestBody EmployeeDetails employeeDetails){
@@ -30,6 +32,7 @@ public class EmployeeController {
 
     @RequestMapping(value = "api/getemployee/{employeeId}", method = RequestMethod.GET)
     public ResponseEntity<Object> getEmployee(@PathVariable int employeeId) throws EmployeeNotFoundException {
+        logger.info("Employee Id received:"+ employeeId);
         EmployeeDetails employeeDetails = new EmployeeDetails();
 
         try {
@@ -37,7 +40,6 @@ public class EmployeeController {
         }catch (EmployeeNotFoundException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
         }
-
         return new ResponseEntity<>(employeeDetails,HttpStatus.OK);
     }
 
@@ -49,7 +51,7 @@ public class EmployeeController {
 
     @RequestMapping(value = "/api/updateemployee/{employeeId}", method = RequestMethod.PUT)
     public ResponseEntity<Object> updateEmployee(@PathVariable int employeeId, @RequestBody EmployeeDetails employeeDetails) throws EmployeeNotFoundException {
-
+        logger.info("Employee Id received:"+ employeeId);
         try {
             employeeDetails.setEmployeeId(employeeId);
             employeeService.updateEmployee(employeeDetails);
@@ -62,7 +64,7 @@ public class EmployeeController {
 
     @RequestMapping(value = "/api/deleteemployee/{employeeId}",method = RequestMethod.DELETE)
     public ResponseEntity<String> deleteEmployee(@PathVariable int employeeId) throws EmployeeNotFoundException {
-
+        logger.info("Employee Id received:"+ employeeId);
         try {
             employeeService.deleteEmployee(employeeId);
         } catch (EmployeeNotFoundException ex) {

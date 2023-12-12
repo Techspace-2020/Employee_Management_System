@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 public class EmployeeDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty(value = "Employee_Id")
     private int employeeId;
 
